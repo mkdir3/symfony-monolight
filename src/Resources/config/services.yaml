@@ -1,0 +1,22 @@
+services:
+  TenderPanini\SymfonyMonolight\Command\ShowLogsCommand:
+    tags:
+    - { name: 'console.command', command: 'monolight:logs' }
+    arguments:
+      $renderService: '@TenderPanini\SymfonyMonolight\Services\RenderService'
+      
+  TenderPanini\SymfonyMonolight\Services\ConfigHandler:
+    arguments:
+      $config: '%symfony_monolight.config%'
+
+  TenderPanini\SymfonyMonolight\Services\LogHandler:
+    arguments:
+      $configHandler: '@TenderPanini\SymfonyMonolight\Services\ConfigHandler'
+      $logParser: '@TenderPanini\SymfonyMonolight\Services\LogParser'
+
+  TenderPanini\SymfonyMonolight\Services\RenderService:
+      arguments:
+        $logHandler: '@TenderPanini\SymfonyMonolight\Services\LogHandler'
+
+  TenderPanini\SymfonyMonolight\Services\LogParser:
+
