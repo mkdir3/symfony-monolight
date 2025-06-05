@@ -22,19 +22,24 @@ class ConfigHandler
             throw new \InvalidArgumentException('Default log configuration is required.');
         }
 
-        if (isset($config['in_use']) && $config['in_use'] !== 'default' && !empty($config['custom'])) {
+        $this->logDirectory = $config['default']['log_directory'];
+        $this->logPattern   = $config['default']['log_pattern'];
+
+        if (isset($config['in_use']) && $config['in_use'] !== 'default') {
+            if (empty($config['custom'])) {
+                throw new \InvalidArgumentException("Custom configuration '{$config['in_use']}' not found.");
+            }
+
             foreach ($config['custom'] as $customConfig) {
                 if ($customConfig['key'] === $config['in_use']) {
-                    $this->logDirectory = $customConfig['log_directory'] ?? $this->logDirectory;
-                    $this->logPattern = $customConfig['log_pattern'] ?? $this->logPattern;
+                    $this->logDirectory = $customConfig['log_directory'];
+                    $this->logPattern   = $customConfig['log_pattern'];
                     return;
                 }
             }
+
             throw new \InvalidArgumentException("Custom configuration '{$config['in_use']}' not found.");
         }
-
-        $this->logDirectory = $config['default']['log_directory'];
-        $this->logPattern   = $config['default']['log_pattern'];
     }
 
     public function getLogDirectory(): string

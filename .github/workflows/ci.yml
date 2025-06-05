@@ -1,0 +1,24 @@
+name: CI
+on:
+  push:
+    branches: ["*"]
+  pull_request:
+    branches: ["*"]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    container:
+      image: php:8.2-cli-alpine
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install dependencies
+        run: |
+          apk add --no-cache git zip unzip libxml2-dev
+          docker-php-ext-install xml
+          php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+          php composer-setup.php --quiet --install-dir=/usr/local/bin --filename=composer
+          rm composer-setup.php
+          composer install --no-interaction --no-progress
+      - name: Run PHPUnit
+        run: vendor/bin/phpunit
