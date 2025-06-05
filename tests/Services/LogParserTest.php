@@ -23,7 +23,7 @@ class LogParserTest extends TestCase
         $this->assertSame('2023-10-05T21:34:18+00:00', $first->getTimestamp());
         $this->assertSame('INFO', $first->getLevel());
         $this->assertSame('app', $first->getCategory());
-        $this->assertSame('Starting ', $first->getMessage());
+        $this->assertSame('Starting', $first->getMessage());
 
         $second = $logs[1];
         $this->assertSame(['foo' => 'bar'], $second->getContext());

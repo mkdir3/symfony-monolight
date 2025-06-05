@@ -19,7 +19,7 @@ class LogParser
         }
 
         foreach ($lines as $line) {
-            $pattern = '/^\[(?P<timestamp>.*)\] (?P<category>.*)\.(?P<level>\w+): (?P<message>[^\[]+)( \[(?P<context>[^\]].*)\])? \[\]$/';
+            $pattern = '/^\[(?P<timestamp>[^\]]+)\] (?P<category>[^.]+)\.(?P<level>\w+): (?P<message>.*?)(?: (?P<context>\{.*?\}|\[.*?\]))? \[\]$/';
 
             if (preg_match($pattern, $line, $matches)) {
                 $context = isset($matches['context']) ? json_decode($matches['context'], true, JSON_THROW_ON_ERROR) ?? [] : [];
